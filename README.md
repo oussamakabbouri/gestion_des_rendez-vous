@@ -66,3 +66,76 @@ par rôle sur chaque route frontend (`ProtectedRoute`) et backend
 ---
 
 ## Structure du projet
+
+rdv-app/
+├── backend/ ← Spring Boot (src/main/java/...)
+│ ├── auth/ ← JWT filter, SecurityConfig
+│ ├── controller/ ← REST controllers par domaine
+│ ├── service/ ← logique métier
+│ ├── repository/ ← Spring Data JPA
+│ └── dto/ ← Request / Response records
+│
+└── frontend/ ← React (src/...)
+├── api/ ← instance Axios + interceptor JWT
+├── context/ ← AuthContext, NotifContext
+├── services/ ← un fichier par endpoint
+├── hooks/ ← useRendezVous, useDisponibilites...
+├── components/ ← layouts, common, calendar
+└── pages/ ← auth/, admin/, employe/, demandeur/, gestionnaire/
+
+---
+
+## Démarrage rapide
+
+### Prérequis
+
+- Java 17+
+- Node.js 18+
+- MySQL 8
+
+### Backend
+
+```bash
+cd backend
+# Configurer src/main/resources/application.properties
+# spring.datasource.url=jdbc:mysql://localhost:3306/rdv_db
+# spring.datasource.username=root
+# spring.datasource.password=****
+mvn spring-boot:run
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+API disponible sur `http://localhost:8080/api/v1`  
+Interface disponible sur `http://localhost:5173`
+
+---
+
+## Endpoints principaux
+
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/v1/auth/login` | Connexion → retourne JWT |
+| `POST` | `/api/v1/auth/register` | Inscription demandeur |
+| `GET` | `/api/v1/services` | Liste des services |
+| `GET` | `/api/v1/disponibilites/service/{id}` | Créneaux libres |
+| `POST` | `/api/v1/rendez-vous` | Réserver un créneau |
+| `PATCH` | `/api/v1/rendez-vous/{id}/statut` | Valider / annuler |
+| `GET` | `/api/v1/rendez-vous/mes-rdv` | RDV du demandeur |
+| `GET` | `/api/v1/admin/statistiques/dashboard` | KPIs globaux |
+| `GET` | `/api/v1/admin/utilisateurs` | Liste paginée |
+
+> Tous les endpoints protégés requièrent `Authorization: Bearer <token>`
+
+---
+
+## Licence
+
+MIT — libre d'utilisation, de modification et de distribution.
+
